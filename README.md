@@ -57,26 +57,98 @@ style Agents fill:#FFBB78,stroke:#333,stroke-width:2px,color:#fff,font-weight:bo
 style Caching fill:#AEC7E8,stroke:#333,stroke-width:2px,color:#fff,font-weight:bold
 
 ```
-## Explanation of the Conceptual Diagram: ##
-This diagram is divided into two main subgraphs to represent the existing Language Learning Platform and how a new Generative AI component (exemplified by a "Vocab Importer") would integrate into it.
-### 1. Core Language Learning Platform: ###
-   -  ### User (Student / Teacher):### Represents the end-users interacting with the system.
-   -  ### Language Learning Portal (Web/App):### This is the front-end React application that users interact with.
-   -  ### Backend API (Flask App):### The back-end Flask application that handles requests from the front-end. All interactions with the database typically go through this API.
-   - ### Relational Database (e.g., SQLite):### The SQLite database used to store application data, such as words and word groups.
-   - ### Study Activities / Learning Games:### These are the various learning tools and games launched or presented by the front-end portal, such as writing practice apps, text adventures, visual novels, and sentence constructors. They interact with the Backend API for data.
-### 2. GenAI Augmentation: Vocab Importer Example: ###
- - ### Internal User / Teacher:### Represents an administrator or teacher who would use the Vocab Importer to populate the application with new content.
- - ### Vocab Importer Tool (e.g., Gradio/Streamlit):### This is a new interface-facing tool designed to generate and import vocabulary. It will initiate requests to the GenAI System.
- - ### GenAI System:### This subgraph details the conceptual components of a generative AI workflow, as outlined by Rola.
-   - ### Context Management / Prompt Engineering:### This component is responsible for formatting the input provided to the AI model, enriching it with context or specific instructions.
-        - ### AI Model (Large Language Model - LLM):### This is the core generative model (e.g., a foundation model from a provider like OpenAI or Anthropic) that generates new content, in this case, vocabulary.
-        - ### Optional GenAI Components:### These are additional conceptual layers that can be added to enhance the GenAI system, illustrating the flexibility in choosing ### ### complexity for deployment ("we show you choose"):### 
-            - ### Guardrails (Input/Output Filtering):### These act as fencing mechanisms to control what information leaves your company and to filter potentially unsafe or biased output from the model. They can filter both input to and output from the LLM.
-            - ### Pipeline Orchestrator:### A system that chains multiple processes within the GenAI workflow, managing the flow from user input to model response and potentially incorporating other tools or models. It helps with tracing and state management.
-           - ### Knowledge Base (RAG):### Represents a retrieval augmented generation (RAG) pattern, where additional, specific knowledge (e.g., company data) is retrieved from a database to enhance the context provided to the LLM.
-            - ### Agents / External Actions:### Software systems that can execute actions on the model's behalf outside the core generation, such as updating orders or sending emails. This gives the model "agency".
-            - ### Caching:### A mechanism to reduce latency and cost by storing frequently accessed model responses or data retrievals.
-    ◦ Vocab Importer returns Formatted Vocab (JSON): The generated vocabulary, after passing through the GenAI system, is sent back to the Vocab Importer.
-    ◦ Vocab Importer Imports into Backend: Finally, the formatted vocabulary is sent via the Backend API to be stored in the Relational Database, making it available for the Language Learning Portal.
-This diagram represents the high-level architectural design considerations for integrating Generative AI into the Lang Portal, providing a clear visual for understanding the system's conceptual flow and its potential expansion.
+# 🧠 Conceptual Diagram Explanation: GenAI-Augmented Language Learning Platform
+
+This document explains the **conceptual architecture** of a language learning platform integrated with a **Generative AI system** — specifically through a feature called **Vocab Importer**.
+
+---
+
+## 🌐 1. Core Language Learning Platform
+
+This part represents the existing non-AI system. It includes the main web app, backend, database, and learning games:
+
+- 👩‍🏫 **User (Student / Teacher):**  
+  The primary users who interact with the system for learning or managing content.
+
+- 🖥️ **Language Learning Portal (Web/App):**  
+  A front-end **React** application that users engage with for vocabulary practice and activities.
+
+- 🔁 **Backend API (Flask App):**  
+  A **Flask-based** back-end system that handles data requests/responses between the front-end and the database.
+
+- 🗃️ **Relational Database (SQLite):**  
+  A lightweight local database where words, word groups, and user progress are stored.
+
+- 🎮 **Study Activities / Learning Games:**  
+  Fun and interactive tools that aid language learning, like:
+  - ✍️ Writing Practice App
+  - 🎮 Text Adventure Game
+  - 📚 Visual Novel Reader
+  - 🧱 Sentence Constructor  
+  These tools fetch and submit data through the **Backend API**.
+
+---
+
+## 🤖 2. GenAI Augmentation: Vocab Importer Integration
+
+This layer represents the **new Generative AI components** introduced to expand the capabilities of the platform.
+
+### 🧑‍💼 Internal User (Teacher / Admin)
+- A teacher or admin uses this tool to generate and upload new vocabulary content.
+
+### 🛠️ Vocab Importer Tool (e.g., Gradio/Streamlit)
+- An interface where the internal user types a topic (e.g., "kitchen vocabulary") to generate words.
+- This request flows through a **Generative AI pipeline**.
+
+---
+
+### 🧠 GenAI System (Conceptual Workflow)
+
+This is the **conceptual GenAI architecture** as outlined by expert Rola — visualizing how input flows through the GenAI model and returns structured content.
+
+- 🧰 **Context Management / Prompt Engineering:**  
+  Prepares the input prompt with relevant formatting, tone, and context before sending it to the LLM.
+
+- 🧠 **AI Model (LLM - Large Language Model):**  
+  The core generative engine — e.g., GPT from OpenAI or Claude from Anthropic — responsible for generating new vocabulary.
+
+#### 🧩 Optional GenAI Components ("We Show You Choose")
+
+These are optional layers that can be added for a more **production-grade GenAI system**:
+
+- 🛡️ **Guardrails (Input/Output Filtering):**  
+  Filters out sensitive or unsafe data either before sending to the LLM or after generation.
+
+- 📦 **Pipeline Orchestrator:**  
+  Controls and sequences all the components in the GenAI pipeline (prompt → model → response → action). Also handles:
+  - Logging
+  - State management
+  - Multi-step flows
+
+- 📚 **Knowledge Base (RAG - Retrieval-Augmented Generation):**  
+  Fetches external context (e.g., company data) to be added to the prompt — improving the model’s accuracy.
+
+- 🤖 **Agents / External Actions:**  
+  Can act on behalf of the model — e.g., updating a DB, sending emails, or executing tasks.
+
+- ⚡ **Caching:**  
+  Stores commonly generated outputs or queries to reduce cost and improve response speed.
+
+---
+
+### 🔁 Flow Summary
+
+1. ✍️ Internal User inputs a topic in **Vocab Importer** (e.g., "restaurant vocabulary")
+2. ⚙️ Prompt is sent through the **GenAI System**
+3. 🧠 LLM generates the **formatted vocabulary (JSON)**
+4. 📩 Vocab Importer receives the result
+5. 🔄 Sends it to **Backend API** for saving in the database
+6. 📚 The **Language Learning Portal** can now access and display this new content
+
+---
+
+## 🧱 Visual Summary
+
+This architecture explains how Generative AI fits seamlessly into an existing educational platform, providing a **scalable and modular design**:
+
+
