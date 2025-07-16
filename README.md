@@ -1,3 +1,4 @@
+```mermaid
 graph TD
     subgraph Core Language Learning Platform
         User["Student / Teacher"] --> FrontEnd["Language Learning Portal (Web/App)"]
