@@ -1,3 +1,4 @@
+# prequesties
 ```mermaid
 graph TD
     subgraph Core Language Learning Platform
@@ -56,15 +57,15 @@ style Agents fill:#FFBB78,stroke:#333,stroke-width:2px,color:#fff,font-weight:bo
 style Caching fill:#AEC7E8,stroke:#333,stroke-width:2px,color:#fff,font-weight:bold
 
 ```
-# Explanation of the Conceptual Diagram: #
+## Explanation of the Conceptual Diagram: ##
 This diagram is divided into two main subgraphs to represent the existing Language Learning Platform and how a new Generative AI component (exemplified by a "Vocab Importer") would integrate into it.
-## 1. Core Language Learning Platform: ##
+### 1. Core Language Learning Platform: ###
     ◦ User (Student / Teacher): Represents the end-users interacting with the system.
     ◦ Language Learning Portal (Web/App): This is the front-end React application that users interact with.
     ◦ Backend API (Flask App): The back-end Flask application that handles requests from the front-end. All interactions with the database typically go through this API.
     ◦ Relational Database (e.g., SQLite): The SQLite database used to store application data, such as words and word groups.
     ◦ Study Activities / Learning Games: These are the various learning tools and games launched or presented by the front-end portal, such as writing practice apps, text adventures, visual novels, and sentence constructors. They interact with the Backend API for data.
-## 2. GenAI Augmentation: Vocab Importer Example: ##
+### 2. GenAI Augmentation: Vocab Importer Example: ###
     ◦ Internal User / Teacher: Represents an administrator or teacher who would use the Vocab Importer to populate the application with new content.
     ◦ Vocab Importer Tool (e.g., Gradio/Streamlit): This is a new interface-facing tool designed to generate and import vocabulary. It will initiate requests to the GenAI System.
     ◦ GenAI System: This subgraph details the conceptual components of a generative AI workflow, as outlined by Rola.
