@@ -1,61 +1,66 @@
 # prequesties
 ```mermaid
 graph TD
-    subgraph Core Language Learning Platform
-        User["Student / Teacher"] --> FrontEnd["Language Learning Portal (Web/App)"]
-        FrontEnd -- "Interacts via API" --> BackEnd["Backend API (Flask App)"]
-        BackEnd -- "Stores & Retrieves" --> Database["Relational Database (e.g., SQLite)"]
-        FrontEnd -- "Launches / Presents" --> StudyActivities["Study Activities / Learning Games"]
-        StudyActivities -- "Interacts via API" --> BackEnd
+  %% === Core Language Learning Platform === %%
+  subgraph Core Language Learning Platform
+    User["👨‍🎓 Student / Teacher"] --> FrontEnd["🖥️ Language Learning Portal<br>(React Frontend)"]
+    FrontEnd -- "Interacts via API" --> BackEnd["🔁 Backend API<br>(Flask App)"]
+    BackEnd -- "Stores & Retrieves" --> Database["🗄️ Relational Database<br>(SQLite)"]
+    FrontEnd -- "Launches Activities" --> StudyActivities["🎮 Study Activities<br>(Games, Apps)"]
+    StudyActivities -- "Interacts via API" --> BackEnd
+  end
+
+  %% === GenAI Augmentation === %%
+  subgraph GenAI Augmentation: Vocab Importer
+    InternalUser["👩‍🏫 Internal User / Teacher"] --> VocabImporter["🛠️ Vocab Importer Tool<br>(Gradio / Streamlit)"]
+    VocabImporter -- "Requests Vocabulary" --> GenAISystem["🧠 GenAI System"]
+
+    subgraph GenAI System
+      GenAISystem --> ContextManagement["🧰 Context Management<br>/ Prompt Engineering"]
+      ContextManagement -- "Prepares Input" --> LLM["🤖 AI Model<br>(LLM - GPT / Claude)"]
+      LLM -- "Generates Vocab" --> GenAISystem
+
+      %% === Optional GenAI Components === %%
+      subgraph Optional GenAI Components
+        GuardRails["🛡️ Guardrails<br>(Input/Output Filtering)"]
+        PipelineOrchestrator["🧪 Pipeline Orchestrator"]
+        KnowledgeBase["📚 Knowledge Base<br>(RAG)"]
+        Agents["🦾 Agents<br>/ External Actions"]
+        Caching["⚡ Caching"]
+
+        ContextManagement -- "Subject to" --> GuardRails
+        GuardRails -- "Filters" --> LLM
+        LLM -- "Managed by" --> PipelineOrchestrator
+        PipelineOrchestrator -- "Integrates" --> KnowledgeBase
+        PipelineOrchestrator -- "Triggers" --> Agents
+        LLM -- "Results may be" --> Caching
+        Caching -- "Serves" --> GenAISystem
+      end
     end
 
-    subgraph GenAI Augmentation: Vocab Importer Example
-        InternalUser["Internal User / Teacher"] --> VocabImporter["Vocab Importer Tool (e.g., Gradio/Streamlit)"]
-        VocabImporter -- "Requests Vocabulary Generation" --> GenAISystem["GenAI System"]
+    GenAISystem -- "Returns Formatted Vocab<br>(JSON Format)" --> VocabImporter
+    VocabImporter -- "Imports to DB via API" --> BackEnd
+  end
 
-        subgraph GenAI System
-            GenAISystem --> ContextManagement["Context Management / Prompt Engineering"]
-            ContextManagement -- "Prepares input for" --> LLM["AI Model (Large Language Model)"]
-            LLM -- "Generates Vocab" --> GenAISystem
+  %% === Styling === %%
+  style User fill:#1F77B4,stroke:#333,stroke-width:2px,color:#fff
+  style FrontEnd fill:#FF7F0E,stroke:#333,stroke-width:2px,color:#fff
+  style BackEnd fill:#D62728,stroke:#333,stroke-width:2px,color:#fff
+  style Database fill:#2CA02C,stroke:#333,stroke-width:2px,color:#fff
+  style StudyActivities fill:#FF7F0E,stroke:#333,stroke-width:2px,color:#fff
 
-            subgraph Optional GenAI Components
-                GuardRails["Guardrails (Input/Output Filtering)"]
-                PipelineOrchestrator["Pipeline Orchestrator"]
-                KnowledgeBase["Knowledge Base (RAG)"]
-                Agents["Agents / External Actions"]
-                Caching["Caching"]
+  style InternalUser fill:#1F77B4,stroke:#333,stroke-width:2px,color:#fff
+  style VocabImporter fill:#9467BD,stroke:#333,stroke-width:2px,color:#fff
+  style GenAISystem fill:#8C564B,stroke:#333,stroke-width:2px,color:#fff
 
-                ContextManagement -- "Subject to" --> GuardRails
-                GuardRails -- "Filters" --> LLM
-                LLM -- "Managed by" --> PipelineOrchestrator
-                PipelineOrchestrator -- "Integrates" --> KnowledgeBase
-                PipelineOrchestrator -- "Triggers" --> Agents
-                LLM -- "Results may be" --> Caching
-                Caching -- "Serves" --> GenAISystem
-            end
-        end
+  style ContextManagement fill:#17BECF,stroke:#333,stroke-width:2px,color:#fff
+  style LLM fill:#8C564B,stroke:#333,stroke-width:2px,color:#fff
 
-        GenAISystem -- "Returns Formatted Vocab (JSON)" --> VocabImporter
-        VocabImporter -- "Imports into" --> BackEnd
-    end
-
-    style User fill:#1F77B4,stroke:#333,stroke-width:3px,color:#fff,font-weight:bold
-    style FrontEnd fill:#FF7F0E,stroke:#333,stroke-width:3px,color:#fff,font-weight:bold
-    style BackEnd fill:#D62728,stroke:#333,stroke-width:3px,color:#fff,font-weight:bold
-    style Database fill:#2CA02C,stroke:#333,stroke-width:3px,color:#fff,font-weight:bold
-    style StudyActivities fill:#FF7F0E,stroke:#333,stroke-width:3px,color:#fff,font-weight:bold
-    style InternalUser fill:#1F77B4,stroke:#333,stroke-width:3px,color:#fff,font-weight:bold
-    style VocabImporter fill:#9467BD,stroke:#333,stroke-width:3px,color:#fff,font-weight:bold
-    style GenAISystem fill:#8C564B,stroke:#333,stroke-width:3px,color:#fff,font-weight:bold
-    style ContextManagement fill:#17BECF,stroke:#333,stroke-width:3px,color:#fff,font-weight:bold
-    style LLM fill:#8C564B,stroke:#333,stroke-width:3px,color:#fff,font-weight:bold
-    style GuardRails fill:#BCBD23,stroke:#333,stroke-width:3px,color:#fff,font-weight:bold
-    style PipelineOrchestrator fill:#E377C2,stroke:#333,stroke-width:3px,color:#fff,font-weight:bold
-    style KnowledgeBase fill:#7F7F7F,stroke:#333,stroke-width:3px,color:#fff,font-weight:bold
-    style Agents fill:#FFBB78,stroke:#333,stroke-width:3px,color:#fff,font-weight:bold
-    style Caching fill:#AEC7E8,stroke:#333,stroke-width:3px,color:#fff,font-weight:bold
-
-
+  style GuardRails fill:#BCBD23,stroke:#333,stroke-width:2px,color:#fff
+  style PipelineOrchestrator fill:#E377C2,stroke:#333,stroke-width:2px,color:#fff
+  style KnowledgeBase fill:#7F7F7F,stroke:#333,stroke-width:2px,color:#fff
+  style Agents fill:#FFBB78,stroke:#333,stroke-width:2px,color:#000
+  style Caching fill:#AEC7E8,stroke:#333,stroke-width:2px,color:#000
 
 ```
 # 🧠 Conceptual Diagram Explanation: GenAI-Augmented Language Learning Platform
